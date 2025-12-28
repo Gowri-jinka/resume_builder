@@ -1,0 +1,45 @@
+{% extends 'resume/base.html' %}
+{% load static %}
+{% block title %}Choose a Template{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <h1>Choose Your Resume Template</h1>
+        <p>Select a layout to start building your professional resume.</p>
+    </div>
+
+    <form method="POST" action="{% url 'choose_template' %}">
+        {% csrf_token %}
+        <div class="template-options">
+
+            <!-- Template Card 1: Single Column -->
+            <div class="template-card">
+                <div class="card-image">
+                    <img src="{% static 'images/single-column.png' %}" alt="Single Column Resume Template">
+                </div>
+                <div class="card-content">
+                    <h3>Single Column</h3>
+                    <p>A classic, straightforward layout perfect for traditional applications and industries.</p>
+                    <button type="submit" name="template" value="single-column" class="btn btn-primary">Select this Template</button>
+                </div>
+            </div>
+
+            <!-- Template Card 2: Multi-Column -->
+            <div class="template-card">
+                <div class="card-image">
+                    <img src="{% static 'images/multi-column.png' %}" alt="Multi-Column Resume Template">
+                </div>
+                <div class="card-content">
+                    <h3>Multi-Column</h3>
+                    <p>A modern design that uses space efficiently to showcase your skills and experience.</p>
+                    <button type="submit" name="template" value="multi-column" class="btn btn-primary">Select this Template</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'resume/base.html' %}
+{% block title %}Build Your Resume - Multi-Column{% endblock %}
+
+{% block content %}
+<div class="resume-builder-container">
+    
+    <!-- ======================================================= -->
+    <!-- === LEFT SIDE: DYNAMIC & DRAGGABLE FORM COLUMNS     === -->
+    <!-- ======================================================= -->
+    <div class="builder-forms builder-forms-multi-column">
+        
+        <!-- MAIN COLUMN DROP ZONE -->
+        <div class="form-column" id="form-column-1" data-column="1">
+            <h2 class="form-column-title">Main Column</h2>
+            {% for section in main_sections %}
+                <div class="form-block draggable-section" data-section-id="{{ section.id }}">
+                    <div class="drag-handle">::</div>
+                    <!-- Dynamically include the correct form based on section name -->
+                    {% include 'resume/partials/form_'|add:section.name|add:'.html' with section=section %}
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- SIDEBAR DROP ZONE -->
+        <div class="form-column" id="form-column-2" data-column="2">
+            <h2 class="form-column-title">Sidebar</h2>
+            {% for section in sidebar_sections %}
+                <div class="form-block draggable-section" data-section-id="{{ section.id }}">
+                    <div class="drag-handle">::</div>
+                    <!-- Dynamically include the correct form based on section name -->
+                    {% include 'resume/partials/form_'|add:section.name|add:'.html' with section=section %}
+                </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- === RIGHT SIDE: DYNAMIC PREVIEW COLUMNS           === -->
+    <!-- ======================================================= -->
+    <div class="resume-preview-container">
+        <div class="preview-a4-page preview-multi-column">
+            
+            <!-- PREVIEW MAIN COLUMN -->
+            <div class="preview-main-content">
+                <!-- We need to find the 'details' section to get the name for the header -->
+                {% for s in main_sections|add:sidebar_sections %}{% if s.name == 'details' %}{% with pd=s.personaldetails %}
+                    <div class="preview-header"><h1>{{ pd.full_name|default:'Your Name' }}</h1><h2>{{ pd.title|default:'Your Title' }}</h2></div>
+                {% endwith %}{% endif %}{% endfor %}
+                
+                {% for section in main_sections %}
+                    <!-- Dynamically include the correct preview based on section name -->
+                    {% include 'resume/partials/preview_'|add:section.name|add:'.html' with section=section %}
+                {% endfor %}
+            </div>
+
+            <!-- PREVIEW SIDEBAR -->
+            <div class="preview-sidebar">
+                {% for section in sidebar_sections %}
+                    <!-- Dynamically include the correct preview based on section name -->
+                    {% include 'resume/partials/preview_'|add:section.name|add:'.html' with section=section %}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- All modals for editing individual entries go here -->
+<!-- ... -->
+{% endblock %}

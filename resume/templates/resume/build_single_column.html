@@ -1,0 +1,274 @@
+{% extends 'resume/base.html' %}
+{% block title %}Build Your Resume{% endblock %}
+
+{% block content %}
+<div class="resume-builder-container">
+    
+    <!-- LEFT SIDE: FORMS -->
+    <div class="builder-forms">
+
+        <div class="form-block">
+            <h3>Contact & Title</h3>
+            <form method="POST">{% csrf_token %}{{ personal_details_form.as_p }}<button type="submit" name="action" value="personal_details" class="btn btn-primary">Save Details</button></form>
+        </div>
+
+        <div class="form-block">
+            <h3>Professional Summary</h3>
+            <form method="POST">{% csrf_token %}{{ summary_form.as_p }}<button type="submit" name="action" value="summary" class="btn btn-primary">Save Summary</button></form>
+        </div>
+
+        <div class="form-block">
+            <h3>Education</h3>
+            <div class="existing-entries-list">
+                {% for edu in resume.education_set.all %}
+                <div class="form-entry" data-entry-id="{{ edu.id }}" data-institution="{{ edu.institution }}" data-degree="{{ edu.degree }}" data-start-date="{{ edu.start_date|date:'Y-m-d' }}" data-end-date="{{ edu.end_date|date:'Y-m-d' }}">
+                    <span>{{ edu.institution }}</span>
+                    <div class="entry-actions">
+                        <button type="button" class="btn-edit-education" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" /><path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25-1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" /></svg></button>
+                        <a href="{% url 'delete_education' edu.id %}" class="btn-delete" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193v-.443A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.84 0a.75.75 0 01-1.5.06l-.3 7.5a.75.75 0 111.5-.06l.3-7.5z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST">{% csrf_token %}{{ education_form.as_p }}<button type="submit" name="action" value="add_education" class="btn btn-primary">Add Education</button></form>
+        </div>
+
+        <div class="form-block">
+            <h3>Work Experience & Internships</h3>
+            <div class="existing-entries-list">
+                {% for exp in resume.experience_set.all %}
+                <div class="form-entry" data-entry-id="{{ exp.id }}" data-job-title="{{ exp.job_title }}" data-company="{{ exp.company }}" data-start-date="{{ exp.start_date|date:'Y-m-d' }}" data-end-date="{{ exp.end_date|date:'Y-m-d'|default:'' }}" data-responsibilities="{{ exp.responsibilities }}" data-currently-work-here="{{ exp.currently_work_here|yesno:'true,false' }}" data-is-internship="{{ exp.is_internship|yesno:'true,false' }}">
+                    <span>{{ exp.job_title }} at {{ exp.company }}</span>
+                    <div class="entry-actions">
+                        <button type="button" class="btn-edit-experience" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" /><path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25-1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" /></svg></button>
+                        <a href="{% url 'delete_experience' exp.id %}" class="btn-delete" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193v-.443A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.84 0a.75.75 0 01-1.5.06l-.3 7.5a.75.75 0 111.5-.06l.3-7.5z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST">{% csrf_token %}{{ experience_form.as_p }}<button type="submit" name="action" value="add_experience" class="btn btn-primary">Add Experience / Internship</button></form>
+        </div>
+
+        <div class="form-block">
+            <h3>Skills by Category</h3>
+            <div class="existing-entries-list">
+                {% for skill in resume.skill_set.all %}
+                <div class="form-entry" data-entry-id="{{ skill.id }}" data-category="{{ skill.category }}" data-skills-list="{{ skill.skills_list }}">
+                    <span>{{ skill.category }}</span>
+                    <div class="entry-actions">
+                        <button type="button" class="btn-edit-skill" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" /><path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25-1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" /></svg></button>
+                        <a href="{% url 'delete_skill' skill.id %}" class="btn-delete" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193v-.443A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.84 0a.75.75 0 01-1.5.06l-.3 7.5a.75.75 0 111.5-.06l.3-7.5z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST">{% csrf_token %}{{ skill_form.as_p }}<button type="submit" name="action" value="add_skill" class="btn btn-primary">Add Skill Category</button></form>
+        </div>
+        
+        <div class="form-block">
+            <h3>Projects</h3>
+            <div class="existing-entries-list">
+                {% for project in resume.project_set.all %}
+                <div class="form-entry" data-entry-id="{{ project.id }}" data-project-name="{{ project.project_name }}" data-project-link="{{ project.project_link|default:'' }}" data-description="{{ project.description }}">
+                    <span>{{ project.project_name }}</span>
+                    <div class="entry-actions">
+                        <button type="button" class="btn-edit-project" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" /><path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25-1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" /></svg></button>
+                        <a href="{% url 'delete_project' project.id %}" class="btn-delete" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193v-.443A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.84 0a.75.75 0 01-1.5.06l-.3 7.5a.75.75 0 111.5-.06l.3-7.5z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST">{% csrf_token %}{{ project_form.as_p }}<button type="submit" name="action" value="add_project" class="btn btn-primary">Add Project</button></form>
+        </div>
+
+        <div class="form-block">
+            <h3>Certifications</h3>
+            <div class="existing-entries-list">
+                {% for cert in resume.certification_set.all %}
+                <div class="form-entry" data-entry-id="{{ cert.id }}" data-name="{{ cert.name }}" data-issuing-organization="{{ cert.issuing_organization }}" data-date-issued="{{ cert.date_issued|date:'Y-m-d' }}" data-credential-url="{{ cert.credential_url|default:'' }}">
+                    <span>{{ cert.name }}</span>
+                    <div class="entry-actions">
+                        <button type="button" class="btn-edit-certification" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" /><path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25-1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" /></svg></button>
+                        <a href="{% url 'delete_certification' cert.id %}" class="btn-delete" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193v-.443A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.84 0a.75.75 0 01-1.5.06l-.3 7.5a.75.75 0 111.5-.06l.3-7.5z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST">{% csrf_token %}{{ certification_form.as_p }}<button type="submit" name="action" value="add_certification" class="btn btn-primary">Add Certification</button></form>
+        </div>
+
+        <div class="form-block">
+            <h3>Achievements</h3>
+            <div class="existing-entries-list">
+                {% for ach in resume.achievement_set.all %}
+                <div class="form-entry" data-entry-id="{{ ach.id }}" data-description="{{ ach.description }}">
+                    <span>{{ ach.description|truncatechars:40 }}</span>
+                    <div class="entry-actions">
+                        <button type="button" class="btn-edit-achievement" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" /><path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25-1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" /></svg></button>
+                        <a href="{% url 'delete_achievement' ach.id %}" class="btn-delete" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.58.22-2.365.468a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193v-.443A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.84 0a.75.75 0 01-1.5.06l-.3 7.5a.75.75 0 111.5-.06l.3-7.5z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST">{% csrf_token %}{{ achievement_form.as_p }}<button type="submit" name="action" value="add_achievement" class="btn btn-primary">Add Achievement</button></form>
+        </div>
+
+    </div> <!-- Correct closing tag for builder-forms -->
+
+    <!-- RIGHT SIDE: A4 SCROLLING PREVIEW -->
+    <div class="resume-preview-container">
+        <div class="preview-controls">
+            <h3>Live Preview</h3>
+            <button id="download-pdf-btn" class="btn btn-primary">Download as PDF</button>
+        </div>
+        <div class="preview-a4-page" id="resume-preview-content">
+            
+            {% with pd=resume.personaldetails %}
+            {% if pd %}
+                 {% if pd.full_name or pd.title %}
+                 <div class="preview-hero">
+                     {% if pd.full_name %}<h1>{{ pd.full_name }}</h1>{% endif %}
+                     {% if pd.title %}<h2>{{ pd.title }}</h2>{% endif %}
+                 </div>
+                 {% endif %}
+                 {% if pd.email or pd.phone_number or pd.address or pd.linkedin_profile or pd.github_profile %}
+                 <div class="preview-contact-info">
+                     {% if pd.email %}<span class="contact-item">{{ pd.email }}</span>{% endif %}
+                     {% if pd.phone_number %}<span class="contact-item">{{ pd.phone_number }}</span>{% endif %}
+                     {% if pd.address %}<span class="contact-item">{{ pd.address }}</span>{% endif %}
+                     {% if pd.linkedin_profile %}<a href="{{ pd.linkedin_profile }}" class="contact-link" target="_blank" rel="noopener noreferrer">LinkedIn <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg></a>{% endif %}
+                     {% if pd.github_profile %}<a href="{{ pd.github_profile }}" class="contact-link" target="_blank" rel="noopener noreferrer">GitHub <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg></a>{% endif %}
+                 </div>
+                 {% endif %}
+            {% endif %}
+            {% endwith %}
+
+            {% if resume.professionalsummary.summary %}
+            <div class="preview-section">
+                <h2>Professional Summary</h2><hr>
+                <p>{{ resume.professionalsummary.summary|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+
+            <div class="preview-section" id="work-experience-section" style="display: none;">
+                <h2>Work Experience</h2><hr>
+                {% for exp in resume.experience_set.all %}
+                    {% if not exp.is_internship %}
+                        <div class="preview-entry">
+                            <div class="preview-entry-header"><span class="entry-title">{{ exp.job_title }}</span><span class="entry-date">{{ exp.start_date|date:"M Y" }} - {% if exp.currently_work_here %}Present{% else %}{{ exp.end_date|date:"M Y"|default:'' }}{% endif %}</span></div>
+                            <div class="preview-entry-subheader"><span>{{ exp.company }}</span></div>
+                            <p class="entry-description">{{ exp.responsibilities|linebreaksbr }}</p>
+                        </div>
+                        <script>document.getElementById('work-experience-section').style.display = 'block';</script>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="preview-section" id="internships-section" style="display: none;">
+                <h2>Internships</h2><hr>
+                {% for exp in resume.experience_set.all %}
+                    {% if exp.is_internship %}
+                        <div class="preview-entry">
+                            <div class="preview-entry-header"><span class="entry-title">{{ exp.job_title }}</span><span class="entry-date">{{ exp.start_date|date:"M Y" }} - {% if exp.currently_work_here %}Present{% else %}{{ exp.end_date|date:"M Y"|default:'' }}{% endif %}</span></div>
+                            <div class="preview-entry-subheader"><span>{{ exp.company }}</span></div>
+                            <p class="entry-description">{{ exp.responsibilities|linebreaksbr }}</p>
+                        </div>
+                        <script>document.getElementById('internships-section').style.display = 'block';</script>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% if resume.education_set.all %}
+            <div class="preview-section">
+                <h2>Education</h2><hr>
+                {% for edu in resume.education_set.all %}
+                    <div class="preview-entry">
+                        <div class="preview-entry-header"><span class="entry-title">{{ edu.institution }}</span><span class="entry-date">{{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }}</span></div>
+                        <div class="preview-entry-subheader"><span>{{ edu.degree }}</span></div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if resume.skill_set.all %}
+            <div class="preview-section">
+                <h2>Skills</h2><hr>
+                <div class="preview-skills-categorized">
+                    {% for skill in resume.skill_set.all %}
+                        <p><strong>{{ skill.category }}:</strong> {{ skill.skills_list }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if resume.project_set.all %}
+            <div class="preview-section">
+                <h2>Projects</h2><hr>
+                {% for project in resume.project_set.all %}
+                    <div class="preview-entry">
+                        <div class="preview-entry-header">
+                            <span class="entry-title">{{ project.project_name }}</span>
+                            {% if project.project_link %}<a href="{{ project.project_link }}" class="entry-link" target="_blank">View Project →</a>{% endif %}
+                        </div>
+                        <p class="entry-description">{{ project.description|linebreaksbr }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if resume.certification_set.all %}
+            <div class="preview-section">
+                <h2>Certifications</h2><hr>
+                {% for cert in resume.certification_set.all %}
+                    <div class="preview-entry">
+                        <div class="preview-entry-header"><span class="entry-title">{{ cert.name }}</span><span class="entry-date">{{ cert.date_issued|date:"M Y" }}</span></div>
+                        <div class="preview-entry-subheader"><span>{{ cert.issuing_organization }}</span></div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if resume.achievement_set.all %}
+            <div class="preview-section">
+                <h2>Achievements</h2><hr>
+                <ul class="preview-list">
+                    {% for ach in resume.achievement_set.all %}
+                        <li>{{ ach.description }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if not resume.personaldetails.full_name and not resume.professionalsummary.summary and not resume.education_set.all and not resume.experience_set.all and not resume.skill_set.all and not resume.project_set.all and not resume.certification_set.all and not resume.achievement_set.all %}
+            <div class="empty-preview-message">
+                <p>Your resume is currently empty.</p>
+                <span>Start by filling out the forms on the left, and your live preview will appear here!</span>
+            </div>
+            {% endif %}
+        
+        </div>
+    </div>
+
+</div>
+
+<!-- HIDDEN MODALS -->
+<div id="editEducationModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content"><div class="modal-header"><h2>Edit Education</h2><button type="button" class="close-modal-btn">&times;</button></div><div class="modal-body"><form method="POST" id="editEducationForm">{% csrf_token %}{{ education_form.as_p }}<button type="submit" class="btn btn-primary">Save Changes</button></form></div></div>
+</div>
+<div id="editExperienceModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content"><div class="modal-header"><h2>Edit Experience</h2><button type="button" class="close-modal-btn">&times;</button></div><div class="modal-body"><form method="POST" id="editExperienceForm">{% csrf_token %}{{ experience_form.as_p }}<button type="submit" class="btn btn-primary">Save Changes</button></form></div></div>
+</div>
+<div id="editSkillModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content"><div class="modal-header"><h2>Edit Skill Category</h2><button type="button" class="close-modal-btn">&times;</button></div><div class="modal-body"><form method="POST" id="editSkillForm">{% csrf_token %}{{ skill_form.as_p }}<button type="submit" class="btn btn-primary">Save Changes</button></form></div></div>
+</div>
+<div id="editProjectModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content"><div class="modal-header"><h2>Edit Project</h2><button type="button" class="close-modal-btn">&times;</button></div><div class="modal-body"><form method="POST" id="editProjectForm">{% csrf_token %}{{ project_form.as_p }}<button type="submit" class="btn btn-primary">Save Changes</button></form></div></div>
+</div>
+<div id="editCertificationModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content"><div class="modal-header"><h2>Edit Certification</h2><button type="button" class="close-modal-btn">&times;</button></div><div class="modal-body"><form method="POST" id="editCertificationForm">{% csrf_token %}{{ certification_form.as_p }}<button type="submit" class="btn btn-primary">Save Changes</button></form></div></div>
+</div>
+<div id="editAchievementModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content"><div class="modal-header"><h2>Edit Achievement</h2><button type="button" class="close-modal-btn">&times;</button></div><div class="modal-body"><form method="POST" id="editAchievementForm">{% csrf_token %}{{ achievement_form.as_p }}<button type="submit" class="btn btn-primary">Save Changes</button></form></div></div>
+</div>
+
+{% endblock %}

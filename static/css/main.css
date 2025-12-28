@@ -1,0 +1,822 @@
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- CSS Variables: A Professional & Pleasant Light Theme --- */
+:root {
+    /* (Colors and fonts remain the same as the previous pleasant theme) */
+    --bg-color: #f8fafc;
+    --surface-color: #ffffff;
+    --surface-hover: #ffffff;
+    --border-color: #e5e7eb;
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary-color: #059669;
+    --secondary-hover: #047857;
+    --danger-color: #dc2626;
+    --danger-hover: #b91c1c;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --font-primary: 'Inter', sans-serif;
+}
+
+/* 
+   ==============================================
+   === 1. ANIMATION KEYFRAMES DEFINITION ===
+   ==============================================
+   This defines the animation we will use. It starts invisible and slightly lower,
+   then fades in and moves up to its final position.
+*/
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- General Body & Theme --- */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Header & Footer --- */
+.main-header {
+    background-color: var(--surface-color);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logo a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.main-header nav {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+}
+
+.main-header nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+    font-size: 0.95rem;
+}
+
+.main-header nav a:hover, .main-header nav a.active {
+    color: var(--primary-color);
+}
+
+.main-header .username {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.main-footer {
+    background-color: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: auto;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* --- Main Content --- */
+.main-content {
+    flex-grow: 1;
+    padding: 2.5rem;
+}
+
+/* --- Dashboard Specific Styles --- */
+.dashboard-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 
+   ==============================================
+   === 2. APPLYING PAGE LOAD ANIMATIONS ===
+   ==============================================
+*/
+.dashboard-header h1,
+.dashboard-header p,
+.dashboard-header .actions .btn {
+    /* Apply the animation */
+    animation: fadeInUp 0.6s ease-out forwards;
+    /* `forwards` keeps the element in its final state */
+}
+
+.resumes-list h2 {
+    animation: fadeInUp 0.6s ease-out 0.2s forwards;
+    /* A small delay to start after the main header */
+    opacity: 0; /* Start invisible until animation begins */
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin-top: 0;
+}
+
+.resumes-list {
+    margin-top: 3rem;
+}
+
+/* --- Refined Resume Card Design --- */
+.resume-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface-color);
+    padding: 1.5rem 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    /* Smoother, longer transition for all properties */
+    transition: all 0.3s ease-in-out; 
+
+    /*
+       ==============================================
+       === 3. STAGGERED LIST ANIMATION ===
+       ==============================================
+    */
+    opacity: 0; /* Start hidden */
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.resume-item:hover {
+    transform: translateY(-5px); /* Slightly more lift on hover */
+    box-shadow: 0 8px 25px rgba(100, 116, 139, 0.15); /* More pronounced shadow */
+    border-color: var(--primary-color); /* Add a color hint on hover */
+}
+
+/* This is the key to the staggered effect. Each card gets a slightly longer delay. */
+.resume-item:nth-child(1) { animation-delay: 0.3s; }
+.resume-item:nth-child(2) { animation-delay: 0.4s; }
+.resume-item:nth-child(3) { animation-delay: 0.5s; }
+.resume-item:nth-child(4) { animation-delay: 0.6s; }
+/* Add more if you expect more than 4 resumes on a page */
+
+
+.resume-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.resume-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.resume-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* --- Professional & Consistent Button Styles --- */
+.btn {
+    padding: 9px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    /* Enhanced transition for a "bouncier" feel */
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn:hover {
+    transform: translateY(-3px); /* Increased lift */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary, .btn-secondary, .btn-danger { 
+    color: white; 
+}
+
+.btn-primary { background-color: var(--primary-color); }
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-secondary { background-color: var(--secondary-color); }
+.btn-secondary:hover { background-color: var(--secondary-hover); }
+
+.btn-danger { background-color: var(--danger-color); }
+.btn-danger:hover { background-color: var(--danger-hover); }
+
+/* --- Message for when no resumes exist --- */
+.no-resumes-message {
+    background-color: transparent;
+    padding: 3rem;
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--text-secondary);
+    animation: fadeInUp 0.6s ease-out 0.3s forwards;
+    opacity: 0;
+}
+
+/*
+================================================================================
+=== STYLES FOR THE "CHOOSE TEMPLATE" PAGE ===
+================================================================================
+*/
+
+.page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto; /* Center the paragraph text */
+}
+
+.template-options {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap; /* Allows cards to stack on smaller screens */
+}
+
+.template-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px; /* Slightly larger radius for a softer look */
+    width: 350px;
+    box-shadow: 0 4px 15px rgba(100, 116, 139, 0.08);
+    transition: all 0.3s ease-in-out;
+    overflow: hidden; /* Ensures the image corners are rounded */
+    display: flex;
+    flex-direction: column;
+
+    /* Staggered animation for the cards */
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.template-card:nth-child(1) { animation-delay: 0.2s; }
+.template-card:nth-child(2) { animation-delay: 0.3s; }
+
+.template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(100, 116, 139, 0.15);
+    border-color: var(--primary-color);
+}
+
+.card-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allows the content to fill the space */
+}
+
+.card-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.card-content p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    flex-grow: 1; /* Pushes the button to the bottom */
+}
+
+.card-content .btn {
+    margin-top: 1.5rem; /* Space between description and button */
+    width: 100%;
+}
+
+.preview-grid {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.preview-grid-left {
+    flex: 60%; /* Takes up 60% of the space */
+}
+
+.preview-grid-right {
+    flex: 40%; /* Takes up 40% of the space */
+}
+
+/*
+================================================================================
+=== STYLES FOR THE RESUME BUILDER PAGES ===
+================================================================================
+*/
+
+.resume-builder-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.builder-forms {
+    flex: 40%; /* Forms take up 40% of the space */
+    background-color: var(--surface-color);
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.resume-preview {
+    flex: 60%; /* Preview takes up 60% */
+    position: sticky;
+    top: 2rem;
+}
+
+.preview-document {
+    background-color: white;
+    color: #333;
+    padding: 2.5rem;
+    border-radius: 5px;
+    min-height: 80vh;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+}
+
+/* --- Specific Styles for Multi-Column Builder --- */
+
+.form-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding-bottom: 0.75rem;
+    margin: 0 0 1.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.builder-forms-multi-column {
+    display: flex;
+    gap: 2rem;
+    padding: 0;
+    background: none;
+    border: none;
+}
+.form-section-main, .form-section-sidebar {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+}
+.form-section-main { flex: 65%; }
+.form-section-sidebar { flex: 35%; }
+
+
+/* --- Styles for Multi-Column PREVIEW --- */
+.preview-multi-column .preview-document {
+    display: flex;
+}
+.preview-sidebar {
+    width: 35%;
+    background-color: #f4f4f5; /* A slightly different background for the sidebar */
+    padding: 2rem;
+    color: #333;
+}
+.preview-main-content {
+    width: 65%;
+    padding: 2rem;
+}
+.sidebar-section h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 1rem;
+}
+.sidebar-section p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+.sidebar-section .skill-tag {
+    background-color: #e4e4e7;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px 10px;
+}
+
+/*
+================================================================================
+=== STYLES FOR THE PROFESSIONAL RESUME PREVIEW (V3) ===
+================================================================================
+*/
+
+/* Add this rule back to your main.css file */
+
+
+/* Styles for the forms on the left (Unchanged) */
+.form-block { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
+.form-block:last-child { border-bottom: none; }
+.form-block h3 { font-size: 1.25rem; font-weight: 600; margin-top: 0; margin-bottom: 1.5rem; }
+.form-block label { display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem; }
+.form-block input[type="text"], .form-block input[type="email"], .form-block input[type="url"],
+.form-block input[type="tel"], .form-block textarea {
+    width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box;
+}
+
+/* Container for the A4 page preview (Unchanged) */
+/*
+================================================================================
+=== STYLES FOR THE PROFESSIONAL RESUME PREVIEW (V3) ===
+================================================================================
+*/
+
+/* THIS IS THE RULE THAT FIXES THE LAYOUT */
+.resume-builder-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* Styles for the forms on the left */
+.form-block { 
+    flex: 40%; /* It's good practice to re-declare flex properties here */
+    margin-bottom: 2.5rem; 
+    padding-bottom: 2rem; 
+    border-bottom: 1px solid var(--border-color); 
+}
+.form-block:last-child { border-bottom: none; }
+/* ... rest of your form styles ... */
+
+
+/* Container for the A4 page preview */
+.resume-preview-container { 
+    flex: 60%;
+    position: sticky; 
+    top: 2rem; 
+    display: flex; 
+    
+    /* ADD THESE TWO LINES */
+    flex-direction: column;
+    justify-content: flex-start;
+}
+/* ... rest of your preview styles ... */
+.preview-a4-page {
+    width: 100%; max-width: 800px; /* Wider for better font display */
+    aspect-ratio: 210 / 297; background: #ffffff;
+    padding: 3rem; /* Generous margins */
+    border-radius: 3px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; box-sizing: border-box;
+}
+.preview-a4-page::-webkit-scrollbar { width: 8px; }
+.preview-a4-page::-webkit-scrollbar-track { background: #f1f1f1; }
+.preview-a4-page::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+.preview-a4-page::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+
+/* --- Styles for the content INSIDE the A4 page (The important changes) --- */
+
+.preview-hero { text-align: center; margin-bottom: 0.5rem; } /* Tighter spacing */
+.preview-hero h1 {
+    font-size: 2.5rem; /* Larger Name */
+    font-weight: 700;
+    margin: 0;
+    color: #1f2937;
+}
+.preview-hero h2 {
+    font-size: 1.2rem; /* Subtitle */
+    font-weight: 500;
+    color: var(--primary-color);
+    margin: 0.25rem 0 0 0;
+}
+
+.preview-contact-info {
+    text-align: center; display: flex; flex-wrap: wrap; justify-content: center;
+    align-items: center; /* Vertically align items */
+    gap: 0.5rem; /* Base gap */
+    padding: 0.5rem 0; margin-bottom: 2.5rem;
+    font-size: 0.9rem;
+    color: #4b5563; /* Slightly darker text */
+}
+
+/* NEW: This adds the separator dot between items */
+.preview-contact-info > *:not(:last-child)::after {
+    content: "•";
+    color: #d1d5db; /* Light gray for the dot */
+    margin-left: 0.5rem;
+    display: inline-block;
+}
+
+.contact-link {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    color: #4b5563;
+    text-decoration: none; transition: color 0.2s ease-in-out;
+}
+.contact-link:hover { color: var(--primary-color); }
+.contact-link svg { width: 16px; height: 16px; opacity: 0.6; } /* Adjust icon size/opacity */
+
+/* General styles for main sections */
+.preview-section { margin-bottom: 2rem; }
+.preview-section h2 {
+    font-size: 1rem; /* Professional section heading size */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #374151;
+}
+.preview-section hr {
+    border: none; border-top: 1.5px solid var(--primary-color); /* Thinner line */
+    margin: 0.35rem 0 1.25rem 0;
+    width: 40px;
+}
+.preview-section p {
+    font-size: 0.95rem; /* Standard readable body text */
+    line-height: 1.7; /* Increased line height for readability */
+    color: #374151;
+}
+
+/* The empty state message (Unchanged) */
+.empty-preview-message { text-align: center; padding: 4rem 2rem; color: #9ca3af; }
+.empty-preview-message p { font-size: 1.2rem; font-weight: 600; margin: 0; }
+.empty-preview-message span { font-size: 1rem; }
+
+/*
+================================================================================
+=== STYLES FOR LISTS & ENTRIES (EDUCATION, EXPERIENCE, ETC.) ===
+================================================================================
+*/
+
+/* Styles for the list of saved entries on the LEFT form side */
+.existing-entries-list {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-color); /* Matches the page background */
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-delete {
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+.btn-delete:hover {
+    color: var(--danger-color);
+}
+.btn-delete svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Styles for the entries on the RIGHT preview side */
+.preview-entry {
+    margin-bottom: 1.5rem; /* Space between each education/job entry */
+}
+.preview-entry:last-child {
+    margin-bottom: 0;
+}
+
+.preview-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.1rem;
+}
+
+.entry-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.entry-date {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.preview-entry-subheader {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #4b5563;
+}
+
+/* STYLES FOR EDIT BUTTON & MODAL */
+.entry-actions { display: flex; align-items: center; gap: 0.75rem; }
+.btn-edit { background: none; border: none; cursor: pointer; padding: 0; color: var(--text-secondary); }
+.btn-edit:hover { color: var(--primary-color); }
+.btn-edit svg { width: 20px; height: 20px; }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: white; padding: 2rem; border-radius: 8px; width: 100%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+.modal-header h2 { margin: 0; color: var(--text-primary); }
+.close-modal-btn { background: none; border: none; font-size: 2rem; font-weight: bold; cursor: pointer; color: var(--text-secondary); }
+
+
+/*
+================================================================================
+=== FIX FOR BUILDER PAGE LAYOUT ===
+================================================================================
+* This rule ensures the forms (left) and preview (right) appear side-by-side.
+*/
+
+
+/*
+================================================================================
+=== STYLES FOR SKILLS SECTION ===
+================================================================================
+*/
+.form-help-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Styles for the LEFT form side skill tags */
+.skills-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.skill-tag-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #eef2ff; /* Light primary color background */
+    color: var(--primary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem; /* Pill shape */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-delete-tag {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.btn-delete-tag:hover {
+    opacity: 1;
+}
+
+.skill-add-form {
+    display: flex;
+    gap: 0.75rem;
+}
+.skill-add-form input {
+    flex-grow: 1; /* Allows input to take up available space */
+}
+
+
+/* Styles for the RIGHT preview side skill tags */
+.preview-skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.skill-tag-preview {
+    background-color: #f3f4f6; /* A neutral light gray */
+    color: #374151; /* Dark gray text */
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/*
+================================================================================
+=== FIX FOR EDIT & DELETE ICONS ===
+================================================================================
+*/
+
+/*
+================================================================================
+=== STYLES FOR ALL EDIT & DELETE ICONS & MODALS (FINAL VERSION) ===
+================================================================================
+*/
+
+.entry-actions { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem; 
+}
+
+/* Base styles for ALL edit and delete buttons */
+.btn-edit, .btn-edit-education, .btn-edit-experience, .btn-edit-skill, .btn-edit-project, .btn-edit-certification, .btn-edit-achievement, .btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-secondary); /* Sets the default icon color */
+    transition: color 0.2s ease;
+}
+
+/* Styles for the SVGs INSIDE the buttons */
+.btn-edit svg, .btn-edit-education svg, .btn-edit-experience svg, .btn-edit-skill svg, .btn-edit-project svg, .btn-edit-certification svg, .btn-edit-achievement svg, .btn-delete svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor; /* Makes the SVG take the color of its parent button */
+}
+
+/* Hover effects for ALL edit buttons */
+.btn-edit:hover, .btn-edit-education:hover, .btn-edit-experience:hover, .btn-edit-skill:hover, .btn-edit-project:hover, .btn-edit-certification:hover, .btn-edit-achievement:hover {
+    color: var(--primary-color); /* Changes icon color to blue */
+}
+
+/* Hover effects for the delete button */
+.btn-delete:hover {
+    color: var(--danger-color); /* Changes icon color to red */
+}
+
+/* Modal Styles */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: white; padding: 2rem; border-radius: 8px; width: 100%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+.modal-header h2 { margin: 0; color: var(--text-primary); }
+.close-modal-btn { background: none; border: none; font-size: 2rem; font-weight: bold; cursor: pointer; color: var(--text-secondary); }
+
+/* STYLES FOR DRAG & DROP */
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #cce5ff; /* A light blue */
+}
+
+/* FINAL STYLES FOR PAGINATED PREVIEW CONTAINER */
+.preview-controls {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1rem; padding: 0 0.5rem;
+}
+.preview-controls h3 { margin: 0; }
+
+#paginated-preview {
+    width: 100%; height: 75vh; overflow-y: auto;
+    background-color: #e5e7eb; padding: 2rem;
+    border-radius: 8px; box-sizing: border-box;
+    display: flex; flex-direction: column; align-items: center;
+}
+.pagedjs_page {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin: 0 0 1.5rem 0 !important;
+}
+.pagedjs_watermark { display: none; }

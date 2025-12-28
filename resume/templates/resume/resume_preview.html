@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ resume.personaldetails.full_name|default:user.username }}'s Resume</title>
+    <!-- Link to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link DIRECTLY to the special preview stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/paged-preview.css' %}">
+    <style>
+        /* Additional styles to make the body look like a preview page */
+        body {
+            background-color: #e5e7eb; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            padding-top: 2rem;
+        }
+        .pagedjs_page {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 2rem !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- This is the same hidden content source from the builder page -->
+    <!-- paged.js will find this and render it -->
+    <div id="resume-content-source">
+        
+        {% with pd=resume.personaldetails %}
+        {% if pd.full_name or pd.title or pd.email or pd.phone_number or pd.address or pd.linkedin_profile or pd.github_profile %}
+        <div class="preview-header-group">
+            {% if pd.full_name or pd.title %}
+            <div class="preview-hero">
+                {% if pd.full_name %}<h1>{{ pd.full_name }}</h1>{% endif %}
+                {% if pd.title %}<h2>{{ pd.title }}</h2>{% endif %}
+            </div>
+            {% endif %}
+            {% if pd.email or pd.phone_number or pd.address or pd.linkedin_profile or pd.github_profile %}
+            <div class="preview-contact-info">
+                {% if pd.email %}<span class="contact-item">{{ pd.email }}</span>{% endif %}
+                {% if pd.phone_number %}<span class="contact-item">{{ pd.phone_number }}</span>{% endif %}
+                {% if pd.address %}<span class="contact-item">{{ pd.address }}</span>{% endif %}
+                {% if pd.linkedin_profile %}<a href="{{ pd.linkedin_profile }}" class="contact-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>{% endif %}
+                {% if pd.github_profile %}<a href="{{ pd.github_profile }}" class="contact-link" target="_blank" rel="noopener noreferrer">GitHub</a>{% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% if resume.professionalsummary.summary %}
+        <div class="preview-section">
+            <h2>Professional Summary</h2><hr>
+            <p>{{ resume.professionalsummary.summary|linebreaksbr }}</p>
+        </div>
+        {% endif %}
+
+        <div class="preview-section" id="work-experience-section-source" style="display: none;">
+            <h2>Work Experience</h2><hr>
+            {% for exp in resume.experience_set.all %}
+                {% if not exp.is_internship %}
+                    <div class="preview-entry">
+                        <div class="preview-entry-header"><span class="entry-title">{{ exp.job_title }}</span><span class="entry-date">{{ exp.start_date|date:"M Y" }} - {% if exp.currently_work_here %}Present{% else %}{{ exp.end_date|date:"M Y"|default:'' }}{% endif %}</span></div>
+                        <div class="preview-entry-subheader"><span>{{ exp.company }}</span></div>
+                        <p class="entry-description">{{ exp.responsibilities|linebreaksbr }}</p>
+                    </div>
+                    <script>document.getElementById('work-experience-section-source').style.display = 'block';</script>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="preview-section" id="internships-section-source" style="display: none;">
+            <h2>Internships</h2><hr>
+            {% for exp in resume.experience_set.all %}
+                {% if exp.is_internship %}
+                    <div class="preview-entry">
+                        <div class="preview-entry-header"><span class="entry-title">{{ exp.job_title }}</span><span class="entry-date">{{ exp.start_date|date:"M Y" }} - {% if exp.currently_work_here %}Present{% else %}{{ exp.end_date|date:"M Y"|default:'' }}{% endif %}</span></div>
+                        <div class="preview-entry-subheader"><span>{{ exp.company }}</span></div>
+                        <p class="entry-description">{{ exp.responsibilities|linebreaksbr }}</p>
+                    </div>
+                    <script>document.getElementById('internships-section-source').style.display = 'block';</script>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        {% if resume.education_set.all %}
+        <div class="preview-section">
+            <h2>Education</h2><hr>
+            {% for edu in resume.education_set.all %}
+                <div class="preview-entry">
+                    <div class="preview-entry-header"><span class="entry-title">{{ edu.institution }}</span><span class="entry-date">{{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }}</span></div>
+                    <div class="preview-entry-subheader"><span>{{ edu.degree }}</span></div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if resume.skill_set.all %}
+        <div class="preview-section">
+            <h2>Skills</h2><hr>
+            <div class="preview-skills-categorized">
+                {% for skill in resume.skill_set.all %}
+                    <p><strong>{{ skill.category }}:</strong> {{ skill.skills_list }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if resume.project_set.all %}
+        <div class="preview-section">
+            <h2>Projects</h2><hr>
+            {% for project in resume.project_set.all %}
+                <div class="preview-entry">
+                    <div class="preview-entry-header">
+                        <span class="entry-title">{{ project.project_name }}</span>
+                        {% if project.project_link %}<a href="{{ project.project_link }}" class="entry-link" target="_blank">View Project →</a>{% endif %}
+                    </div>
+                    <p class="entry-description">{{ project.description|linebreaksbr }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if resume.certification_set.all %}
+        <div class="preview-section">
+            <h2>Certifications</h2><hr>
+            {% for cert in resume.certification_set.all %}
+                <div class="preview-entry">
+                    <div class="preview-entry-header"><span class="entry-title">{{ cert.name }}</span><span class="entry-date">{{ cert.date_issued|date:"M Y" }}</span></div>
+                    <div class="preview-entry-subheader"><span>{{ cert.issuing_organization }}</span></div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if resume.achievement_set.all %}
+        <div class="preview-section">
+            <h2>Achievements</h2><hr>
+            <ul class="preview-list">
+                {% for ach in resume.achievement_set.all %}
+                    <li>{{ ach.description }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Scripts to run the pagination -->
+    <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+    <script>
+        class ResumePolisher extends Paged.Handler {
+            constructor(chunker, polisher, caller) { super(chunker, polisher, caller); }
+        }
+        Paged.registerHandlers(ResumePolisher);
+
+        window.addEventListener('load', () => {
+            let paged = new Paged.Previewer();
+            let source = document.getElementById('resume-content-source');
+            // The body itself will be the preview area
+            paged.preview(source.innerHTML, ["{% static 'css/paged-preview.css' %}"], document.body);
+            source.remove(); // Remove the source to avoid duplicate content
+        });
+    </script>
+</body>
+</html>

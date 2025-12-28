@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login or Register</title>
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-container">
+        <div class="auth-container">
+
+            <!-- Registration Form Card -->
+            <div class="auth-card">
+                <h2 class="auth-title">Register</h2>
+                <p class="auth-subtitle">Create a new account to get started.</p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p class="error-text">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    
+                    {% for error in form.non_field_errors %}
+                        <p class="error-text">{{ error }}</p>
+                    {% endfor %}
+
+                    <button type="submit" name="register" class="btn-auth">Register</button>
+                </form>
+            </div>
+
+            <!-- Login Form Card -->
+            <div class="auth-card">
+                <h2 class="auth-title">Login</h2>
+                <p class="auth-subtitle">Already have an account? Sign in.</p>
+                <form method="post" action="{% url 'auth' %}">
+                    {% csrf_token %}
+
+                    {% for field in login_form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                         {% for error in field.errors %}
+                            <p class="error-text">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+
+                    {% for error in login_form.non_field_errors %}
+                        <p class="error-text">{{ error }}</p>
+                    {% endfor %}
+                    
+                    <button type="submit" name="login" class="btn-auth">Login</button>
+                </form>
+            </div>
+
+        </div>
+        <div class="home-link">
+            <a href="{% url 'welcome' %}">← Back to Welcome Page</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{% extends 'resume/base.html' %}
+{% block title %}Dashboard - AI Resume Builder{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    
+    <div class="dashboard-header">
+        <h1>Resume Builder Dashboard</h1>
+        <p>Welcome back, {{ user.username }}! Create, manage, and download your professional resumes.</p>
+        <div class="actions">
+            <a href="{% url 'choose_template' %}" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                </svg>
+                Create a New Resume
+            </a>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="resumes-list">
+        <h2>Your Existing Resumes</h2>
+        {% if resumes %}
+            {% for resume in resumes %}
+                <div class="resume-item">
+                    <div class="resume-info">
+                        <h3>Template: {{ resume.template_choice|title }}</h3>
+                        <p>Created on: {{ resume.created_at|date:"F j, Y" }}</p>
+                    </div>
+                    <div class="resume-actions">
+                        <a href="{% url 'edit_resume' resume.id %}" class="btn btn-secondary">Edit Resume</a>
+                        <a href="{% url 'delete_resume' resume.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this resume?');">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-resumes-message">
+                <p>You have not created any resumes yet. Click the button above to get started!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

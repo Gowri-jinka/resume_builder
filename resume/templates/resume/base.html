@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Resume Builder{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo"><a href="{% url 'home' %}">Resume Builder</a></div>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            {% if user.is_authenticated %}
+                <span class="username">Profile: {{ user.username }}</span>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="main-footer">
+        <p>© 2025 Gowri. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Script for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- Your custom application script -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
